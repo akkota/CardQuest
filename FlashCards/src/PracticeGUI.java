@@ -20,16 +20,16 @@ public class PracticeGUI implements Runnable {
         startPanel.setBounds(0, 0, 400, 400);
         JButton startButton = new JButton("Start");
         startPanel.add(startButton);
-        JPanel practicePanel = new JPanel(new GridLayout(5,1));
-        practicePanel.setBounds(0, 0, 400, 400);
-        JLabel front = new JLabel();
-        practicePanel.add(front);
+        JPanel practicePanel1 = new JPanel(new GridLayout(5,1));
+        practicePanel1.setBounds(0, 0, 400, 400);
+        JLabel frontPracticePanel1 = new JLabel();
+        practicePanel1.add(frontPracticePanel1);
         JButton showButton = new JButton("Show");
-        practicePanel.add(showButton);
+        practicePanel1.add(showButton);
         JPanel practicePanel2 = new JPanel(new GridLayout(5, 1));
         practicePanel2.setBounds(0, 0, 400, 400);
-        JLabel front2 = new JLabel();
-        practicePanel2.add(front2);
+        JLabel frontPracticePanel2 = new JLabel();
+        practicePanel2.add(frontPracticePanel2);
         JLabel back = new JLabel();
         practicePanel2.add(back);
         JButton nextButton = new JButton("Next");
@@ -37,38 +37,38 @@ public class PracticeGUI implements Runnable {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startButton(startPanel, practicePanel, front);
+                startButton(startPanel, practicePanel1, frontPracticePanel1);
             }
         });
         showButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showButton(practicePanel, practicePanel2, front2, back);
+                showButton(practicePanel1, practicePanel2, frontPracticePanel2, back);
             }
         });
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                nextButton(practicePanel, practicePanel2, front);
+                nextButton(practicePanel1, practicePanel2, frontPracticePanel1);
             }
         });
         frame.add(startPanel);
-        frame.add(practicePanel);
+        frame.add(practicePanel1);
         frame.add(practicePanel2);
         startPanel.setVisible(true);
         startButton.setVisible(true);
-        practicePanel.setVisible(false);
+        practicePanel1.setVisible(false);
         practicePanel2.setVisible(false);
-        front.setVisible(true);
+        frontPracticePanel1.setVisible(true);
         showButton.setVisible(true);
 
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 
-    private void startButton(JPanel startPanel, JPanel practicePanel, JLabel front) {
+    private void startButton(JPanel startPanel, JPanel practicePanel1, JLabel front) {
         startPanel.setVisible(false);
-        practicePanel.setVisible(true);
+        practicePanel1.setVisible(true);
         front.setText(Main.cards.get(current).getFront());
     }
 
