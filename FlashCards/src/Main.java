@@ -1,4 +1,6 @@
 import javax.swing.*;
+
+import java.awt.HeadlessException;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -22,6 +24,7 @@ public class Main {
                 Card card = new Card(cardData[0], cardData[1]); //cardData[0] -> front, cardData[1] -> Back
                 Main.cards.add(card);
             }
+            cardsReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,11 +41,12 @@ public class Main {
             cardWriter.println(card.getFront() + "=" + card.getBack());
             cardWriter.flush();
             JOptionPane.showMessageDialog(null, "Card Successfully added!");
+            cardWriter.close(); 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } 
     }
 
     public static void deleteCard(String front) {
@@ -65,31 +69,35 @@ public class Main {
                 File cardsFile = new File("Cards.txt");
                 File tempFile = new File("temp1.txt");
                 PrintWriter tempWriter = new PrintWriter(new FileOutputStream(tempFile, false));
-                BufferedReader cardReader = new BufferedReader(new FileReader(cardsFile));
-                while (true) {
-                    if (cards.isEmpty()) { //edge case, if the cards arraylist is empty
-                        PrintWriter cardWriter = new PrintWriter(new FileOutputStream(cardsFile, false));
-                        cardWriter.print("");
-                        tempFile.delete();
-                        cardWriter.flush();
-                        cardWriter.close();
-                        JOptionPane.showMessageDialog(null, "Card successfully deleted!");
-                        break;
-                    }
-                    String line = cardReader.readLine();
-                    if (line == null || line.isEmpty()) {
-                        break;
-                    }
-                    String[] cardData = line.split("=");
-                    if (cardData[0].equals(x.getFront()) && cardData[1].equals(x.getBack())) {
-                        continue;
-                    } else {
-                        tempWriter.println(cardData[0] + "=" + cardData[1]);
-                        tempWriter.flush();
-                    }
-                    JOptionPane.showMessageDialog(null, "Card successfully deleted!");
-                    tempFile.renameTo(cardsFile);
-                }
+                try (BufferedReader cardReader = new BufferedReader(new FileReader(cardsFile))) {
+					while (true) {
+					    if (cards.isEmpty()) { //edge case, if the cards arraylist is empty
+					        PrintWriter cardWriter = new PrintWriter(new FileOutputStream(cardsFile, false));
+					        cardWriter.print("");
+					        tempFile.delete();
+					        cardWriter.flush();
+					        cardWriter.close();
+					        JOptionPane.showMessageDialog(null, "Card successfully deleted!");
+					        break;
+					    }
+					    String line = cardReader.readLine();
+					    if (line == null || line.isEmpty()) {
+					        break;
+					    }
+					    String[] cardData = line.split("=");
+					    if (cardData[0].equals(x.getFront()) && cardData[1].equals(x.getBack())) {
+					        continue;
+					    } else {
+					        tempWriter.println(cardData[0] + "=" + cardData[1]);
+					        tempWriter.flush();
+					    }
+					    JOptionPane.showMessageDialog(null, "Card successfully deleted!");
+					    tempFile.renameTo(cardsFile);
+					    tempWriter.close();
+					}
+				} catch (HeadlessException e) {
+					e.printStackTrace();
+				}
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
