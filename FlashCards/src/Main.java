@@ -110,6 +110,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         readCards();
-        SwingUtilities.invokeLater(new MainMenu());
+        SwingUtilities.invokeLater(new IntroGUI());
     }
 }
