@@ -20,7 +20,7 @@ public class Main {
                 if (line == null || line.isEmpty()) {
                     break;
                 }
-                String[] cardData = line.split("=");
+                String[] cardData = line.split("-");
                 Card card = new Card(cardData[0], cardData[1]); //cardData[0] -> front, cardData[1] -> Back
                 Main.cards.add(card);
             }
@@ -38,7 +38,7 @@ public class Main {
                 f.createNewFile();
             }
             PrintWriter cardWriter = new PrintWriter(new FileOutputStream(f, true));
-            cardWriter.println(card.getFront() + "=" + card.getBack());
+            cardWriter.println(card.getFront() + "-" + card.getBack());
             cardWriter.flush();
             JOptionPane.showMessageDialog(null, "Card Successfully added!");
             cardWriter.close(); 
@@ -84,11 +84,11 @@ public class Main {
 					    if (line == null || line.isEmpty()) {
 					        break;
 					    }
-					    String[] cardData = line.split("=");
+					    String[] cardData = line.split("-");
 					    if (cardData[0].equals(x.getFront()) && cardData[1].equals(x.getBack())) {
 					        continue;
 					    } else {
-					        tempWriter.println(cardData[0] + "=" + cardData[1]);
+					        tempWriter.println(cardData[0] + "-" + cardData[1]);
 					        tempWriter.flush();
 					    }
 					    JOptionPane.showMessageDialog(null, "Card successfully deleted!");

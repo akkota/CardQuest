@@ -2,6 +2,7 @@ import javax.print.attribute.standard.JobKOctets;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -34,7 +35,7 @@ public class MainMenu implements Runnable {
         });
         practiceButton.setBounds(375, 200, 200, 200);
         JButton deleteCardButton = new JButton("Delete Card");
-        deleteCardButton.setBounds(600, 200, 200,200);
+        deleteCardButton.setBounds(600, 200, 200, 200);
         deleteCardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,6 +66,46 @@ public class MainMenu implements Runnable {
                 }
             }
         });
+        JButton importCards = new JButton("Import Cards!");
+        importCards.setBounds(1050, 200, 200, 200);
+        importCards.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int option = JOptionPane.showConfirmDialog(null, "To continue with this action, ensure your file" +
+                        " has the front and back of the card seperated by a \"-\" character and ensure each card is seperated by" +
+                        " a new line");
+                if (option == JOptionPane.OK_OPTION) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    int response = fileChooser.showOpenDialog(null);
+                    if (response == JFileChooser.APPROVE_OPTION) {
+                        File userFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                        File cardsFile = new File("Cards.txt");
+                        try {
+                            PrintWriter pw = new PrintWriter(new FileOutputStream(cardsFile, true));
+                            BufferedReader bfr = new BufferedReader(new FileReader(userFile));
+                            while (true) {
+                                String line = bfr.readLine();
+                                if (line == null || line.isEmpty()) {
+                                    break;
+                                }
+                                pw.println(line);
+                                pw.flush();
+                                String[] cardData = line.split("-");
+                                Main.cards.add(new Card(cardData[0], cardData[1]));
+                            }
+                            pw.close();
+                            bfr.close();
+                            JOptionPane.showMessageDialog(null, "Cards imported successfully!");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+
+
+            }
+        });
+        frame.add(importCards);
         frame.add(testButton);
         frame.add(addCardButton);
         frame.add(practiceButton);

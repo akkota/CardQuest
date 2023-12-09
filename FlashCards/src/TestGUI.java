@@ -12,6 +12,10 @@ public class TestGUI implements Runnable {
 
     int current = 0;
 
+    int correct = 0;
+
+    int wrong = 0;
+
     public TestGUI(ArrayList<Card> testCards) {
         this.testCards = testCards;
     }
@@ -43,9 +47,12 @@ public class TestGUI implements Runnable {
         JLabel back = new JLabel();
         back.setBounds(0, 100, 400, 50);
         practicePanel2.add(back);
-        JButton nextButton = new JButton("Next");
-        nextButton.setBounds(0, 200, 400, 50);
-        practicePanel2.add(nextButton);
+        JButton correctButton = new JButton("Correct");
+        correctButton.setBounds(0, 200, 400, 50);
+        practicePanel2.add(correctButton);
+        JButton wrongButton = new JButton("Wrong");
+        wrongButton.setBounds(0, 300, 400, 50);
+        practicePanel2.add(wrongButton);
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,10 +65,16 @@ public class TestGUI implements Runnable {
                 showButton(practicePanel1, practicePanel2, frontPracticePanel2, back);
             }
         });
-        nextButton.addActionListener(new ActionListener() {
+        correctButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                nextButton(practicePanel1, practicePanel2, frontPracticePanel1);
+                correctButton(practicePanel1, practicePanel2, frontPracticePanel1);
+            }
+        });
+        wrongButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                wrongButton(practicePanel1, practicePanel2, frontPracticePanel1);
             }
         });
         frame.add(startPanel);
@@ -95,14 +108,32 @@ public class TestGUI implements Runnable {
         current++;
     }
 
-    private void nextButton(JPanel practicePanel1, JPanel practicePanel2, JLabel front) {
+    private void correctButton(JPanel practicePanel1, JPanel practicePanel2, JLabel front) {
         practicePanel1.setVisible(true);
         if (current == testCards.size()) {
             frame.dispose();
-            JOptionPane.showMessageDialog(null, "You've finished all cards!");
+            JOptionPane.showMessageDialog(null, "You've finished the test! " +
+                    "\nCorrect answers: " + (correct + 1) + "\n" +
+                    "Wrong answers: " + wrong);
             SwingUtilities.invokeLater(new MainMenu());
         } else {
             front.setText(testCards.get(current).getFront());
+            correct++;
+            practicePanel2.setVisible(false);
+        }
+    }
+
+    private void wrongButton(JPanel practicePanel1, JPanel practicePanel2, JLabel front) {
+        practicePanel1.setVisible(true);
+        if (current == testCards.size()) {
+            frame.dispose();
+            JOptionPane.showMessageDialog(null, "You've finished the test! " +
+                    "\nCorrect answers: " + correct + "\n" +
+                    "Wrong answers: " + (wrong + 1));
+            SwingUtilities.invokeLater(new MainMenu());
+        } else {
+            front.setText(testCards.get(current).getFront());
+            wrong++;
             practicePanel2.setVisible(false);
         }
     }
