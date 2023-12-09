@@ -2,12 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class PracticeGUI implements Runnable {
+public class TestGUI implements Runnable {
 
     JFrame frame;
 
+    ArrayList<Card> testCards;
+
     int current = 0;
+
+    public TestGUI(ArrayList<Card> testCards) {
+        this.testCards = testCards;
+    }
 
     @Override
     public void run() {
@@ -74,30 +81,29 @@ public class PracticeGUI implements Runnable {
     private void startButton(JPanel startPanel, JPanel practicePanel1, JLabel front) {
         startPanel.setVisible(false);
         practicePanel1.setVisible(true);
-        front.setText(Main.cards.get(current).getFront());
+        front.setText(testCards.get(current).getFront());
         front.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     private void showButton(JPanel practicePanel1, JPanel practicePanel2, JLabel front, JLabel back) {
         practicePanel1.setVisible(false);
         practicePanel2.setVisible(true);
-        front.setText(Main.cards.get(current).getFront());
+        front.setText(testCards.get(current).getFront());
         front.setHorizontalAlignment(SwingConstants.CENTER);
-        back.setText(Main.cards.get(current).getBack());
+        back.setText(testCards.get(current).getBack());
         back.setHorizontalAlignment(SwingConstants.CENTER);
         current++;
     }
 
     private void nextButton(JPanel practicePanel1, JPanel practicePanel2, JLabel front) {
         practicePanel1.setVisible(true);
-        if (current == Main.cards.size()) {
+        if (current == testCards.size()) {
             frame.dispose();
             JOptionPane.showMessageDialog(null, "You've finished all cards!");
             SwingUtilities.invokeLater(new MainMenu());
         } else {
-            front.setText(Main.cards.get(current).getFront());
+            front.setText(testCards.get(current).getFront());
             practicePanel2.setVisible(false);
         }
     }
-
 }

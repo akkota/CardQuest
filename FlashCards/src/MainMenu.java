@@ -1,6 +1,11 @@
+import javax.print.attribute.standard.JobKOctets;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static javax.swing.JOptionPane.showInputDialog;
 
 public class MainMenu implements Runnable {
 
@@ -13,7 +18,7 @@ public class MainMenu implements Runnable {
         frame.setSize(1440, 800);
         frame.setLayout(null);
         JButton addCardButton = new JButton("Add Card");
-        addCardButton.setBounds(300, 200, 200, 200);
+        addCardButton.setBounds(150, 200, 200, 200);
         addCardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -27,15 +32,40 @@ public class MainMenu implements Runnable {
                 practiceButton();
             }
         });
-        practiceButton.setBounds(600, 200, 200, 200);
+        practiceButton.setBounds(375, 200, 200, 200);
         JButton deleteCardButton = new JButton("Delete Card");
-        deleteCardButton.setBounds(900, 200, 200,200);
+        deleteCardButton.setBounds(600, 200, 200,200);
         deleteCardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deleteCardButton();
             }
         });
+        JButton testButton = new JButton("Test!");
+        testButton.setBounds(825, 200, 200, 200);
+        testButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Main.cards.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You don't have any cards made yet!");
+                    return;
+                }
+                int numTest = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of cards you would like to be tested for"));
+                if (numTest > Main.cards.size()) {
+                    JOptionPane.showMessageDialog(null, "You do not have enough cards!");
+                } else {
+                    ArrayList<Card> shuffledDeck = Main.cards;
+                    Collections.shuffle(shuffledDeck);
+                    ArrayList<Card> testCards = new ArrayList<>();
+                    for (int i = 0; i < numTest; i++) {
+                        testCards.add(shuffledDeck.get(i));
+                    }
+                    SwingUtilities.invokeLater(new TestGUI(testCards));
+                    frame.dispose();
+                }
+            }
+        });
+        frame.add(testButton);
         frame.add(addCardButton);
         frame.add(practiceButton);
         frame.add(deleteCardButton);
